@@ -1,0 +1,61 @@
+$kind: http-request
+name: Login (set accessToken)
+method: POST
+url: "{{baseUrl}}/auth/login"
+order: 2000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "user@example.com",
+      "password": "password"
+    }
+scripts:
+  - type: afterResponse
+    code: >-
+      // Attempt to capture the JWT access token from common response shapes.
+
+      // Expected examples:
+
+      //   { "accessToken": "..." }
+
+      //   { "token": "..." }
+
+      //   { "data": { "accessToken": "..." } }
+
+
+      let json;
+
+      try {
+        json = pm.response.json();
+      } catch (e) {
+        json = null;
+      }
+
+
+      const token =
+        (json && json.accessToken) ||
+        (json && json.token) ||
+        (json && json.data && json.data.accessToken) ||
+        null;
+
+      pm.test('Login returned an access token (if 200)', function () {
+        if (pm.response.code === 200) {
+          pm.expect(token).to.be.a('string').and.not.empty;
+        } else {
+          // Don't fail the request just because the endpoint isn't implemented yet
+          pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 403, 404, 422, 500]);
+        }
+      });
+
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+
+      if (token) {
+        pm.environment.set('accessToken', token);
+      }
+    language: text/javascript

@@ -1,0 +1,22 @@
+$kind: http-request
+name: Me
+method: GET
+url: "{{baseUrl}}/auth/me"
+order: 3000
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 200', function () {
+        pm.response.to.have.status(200);
+      });
+
+      pm.test('Response is JSON', function () {
+        pm.response.to.be.json;
+      });
+
+      pm.test('Response has an id or email field', function () {
+        const json = pm.response.json();
+        pm.expect(json).to.be.an('object');
+        pm.expect(json).to.satisfy(obj => obj.id || obj._id || obj.email);
+      });
+    language: text/javascript
