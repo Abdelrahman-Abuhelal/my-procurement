@@ -39,6 +39,39 @@ This document explains the "why" behind each architectural decision so you under
 - XSRF protection would need extra endpoints
 - localStorage is simpler for this timeframe
 
+**JWT request flow we implemented:**
+```text
+1. User signs up or signs in
+   -> AuthService generates a JWT containing userId
+
+2. Frontend stores the token
+   -> Later sends it as: Authorization: Bearer <token>
+
+3. Protected endpoint is called
+   -> Example: GET /api/auth/me or later GET /api/items
+
+4. JwtAuthGuard runs first
+   -> Blocks request if token is missing or invalid
+
+5. JwtStrategy verifies the token
+   -> Uses JWT_SECRET
+   -> Extracts payload from Authorization header
+
+6. Strategy validate() returns a small user object
+   -> req.user = { userId }
+
+7. Controller reads req.user.userId
+   -> Service loads the real user from MongoDB
+
+8. Response is returned only for authenticated users
+```
+
+**Why this flow is useful:**
+- **Simple:** No server-side session store required
+- **Scalable:** Any backend instance can verify the token
+- **Fits the assessment:** Protected API access is required
+- **Works with Angular guards later:** Frontend can redirect when token is missing/expired
+
 ---
 
 ## 3. State Management: NgRx (Why Not Context API?)

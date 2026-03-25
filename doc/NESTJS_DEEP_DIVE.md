@@ -251,6 +251,53 @@ getMe(@Request() req) {
 
 ---
 
+## JWT Flow We Added In This Project
+
+**The goal:** protect backend routes so only logged-in users can access them.
+
+**Our actual flow:**
+```text
+POST /api/auth/signin
+  -> AuthController.signIn()
+  -> AuthService.signIn()
+  -> verify email + password
+  -> JwtService.sign({ userId })
+  -> return token
+```
+
+**Then for protected routes:**
+```text
+GET /api/auth/me
+  -> Authorization: Bearer <token>
+  -> JwtAuthGuard runs
+  -> JwtStrategy extracts token from header
+  -> JwtStrategy verifies token using JWT_SECRET
+  -> validate(payload) returns { userId }
+  -> Nest attaches that to req.user
+  -> controller calls service with req.user.userId
+  -> service loads current user from MongoDB
+```
+
+**Files involved in our codebase:**
+- `apps/api/src/app/auth/auth.module.ts`
+- `apps/api/src/app/auth/auth.service.ts`
+- `apps/api/src/app/auth/auth.controller.ts`
+- `apps/api/src/app/auth/guards/jwt-auth.guard.ts`
+- `apps/api/src/app/auth/strategies/jwt.strategy.ts`
+
+**What each piece does:**
+- `JwtService.sign(...)`: creates the token after successful login
+- `JwtAuthGuard`: protects a route
+- `JwtStrategy`: verifies the token and decodes its payload
+- `req.user`: holds the authenticated user payload after guard success
+
+**Is JWT mandatory?**
+- JWT specifically is not mandatory
+- protected authenticated API access is mandatory
+- JWT is the simplest and most standard solution for this assessment
+
+---
+
 ## Database with MongoDB
 
 **Install Mongoose:**

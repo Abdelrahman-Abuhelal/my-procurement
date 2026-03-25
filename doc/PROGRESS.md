@@ -196,6 +196,18 @@ doc/
 
 ### Step 8: Backend Setup - Authentication Module (NestJS)
 
+**Progress update:**
+- Re-created the NestJS backend in the Nx `apps/api` layout
+- Migrated sign-up and sign-in auth flow into the new app
+- Added global validation pipe and CORS
+- Added protected `GET /auth/me` endpoint using JWT guard + strategy
+- Verified `signup`, `signin`, and `me` using Postman
+
+**JWT learning outcome:**
+- Understood why protected API routes are required by the assessment
+- Learned the full JWT flow:
+  `signin -> token -> Authorization header -> guard -> strategy -> req.user -> controller -> service`
+
 ---
 
 ## 📋 Future Learning Sessions (Planned)

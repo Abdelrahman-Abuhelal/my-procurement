@@ -63,6 +63,15 @@ export class AuthService {
     };
   }
 
+  async me(userId: string) {
+    const user = await this.userModel.findById(userId).select('-passwordHash');
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return user;
+  }
+
   private generateToken(userId: string) {
     return this.jwtService.sign({ userId });
   }
