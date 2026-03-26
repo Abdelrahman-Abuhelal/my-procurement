@@ -1,0 +1,39 @@
+$kind: http-request
+name: SignUp
+method: POST
+url: '{{baseUrl}}/auth/signup'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Abd Hilal",
+      "email": "abd1@example.com",
+      "password": "StrongPass123!"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 2xx', function () {
+        pm.expect(pm.response.code).to.be.within(200, 299);
+      });
+
+      pm.test('Response has token', function () {
+        const json = pm.response.json();
+        pm.expect(json).to.have.property('token');
+        pm.expect(json.token).to.be.a('string').and.not.empty;
+      });
+
+      // Save token for subsequent requests if provided
+      try {
+        const json = pm.response.json();
+        if (json && json.token) {
+          pm.environment.set('accessToken', json.token);
+        }
+      } catch (e) {
+        // ignore JSON parse errors
+      }
+order: 2039477696464489
