@@ -67,6 +67,7 @@ import { catalogActions } from './state/catalog.actions';
     `
       .catalog-layout { display: grid; gap: 1.25rem; }
       .hero { background: linear-gradient(135deg, #0f172a, #0f766e); color: white; }
+      .hero h1 { color: #000; }
       .grid { display: grid; gap: 1.25rem; grid-template-columns: 1.2fr 0.9fr; }
       .panel { padding: 1.25rem; border-radius: 1rem; background: white; box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08); }
       .panel-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
