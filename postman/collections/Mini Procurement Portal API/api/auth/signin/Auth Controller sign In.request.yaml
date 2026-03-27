@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/signin"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: "{}"
+examples: ./.resources/Auth Controller sign In.resources/examples
+order: 1000

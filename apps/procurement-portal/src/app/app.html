@@ -1,2 +1,17 @@
-<app-nx-welcome></app-nx-welcome>
-<router-outlet></router-outlet>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/catalog">Mini Procurement Portal</a>
+    <nav class="actions">
+      <ng-container *ngIf="user$ | async as user">
+        <span class="user">{{ user.name }}</span>
+        <button type="button" (click)="signOut()">Sign out</button>
+      </ng-container>
+      <ng-container *ngIf="!(user$ | async)">
+        <a routerLink="/sign-in">Sign in</a>
+      </ng-container>
+    </nav>
+  </header>
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,8 +1,6 @@
 $kind: http-request
-name: Me
-method: GET
 url: "{{baseUrl}}/auth/me"
-order: 3000
+method: GET
 scripts:
   - type: afterResponse
     code: |-
@@ -20,3 +18,4 @@ scripts:
         pm.expect(json).to.satisfy(obj => obj.id || obj._id || obj.email);
       });
     language: text/javascript
+order: 3000

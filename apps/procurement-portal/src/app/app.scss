@@ -1,0 +1,52 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.app-shell {
+  min-height: 100dvh;
+  background: radial-gradient(circle at top, #f2f8ff 0%, #f8fafc 45%, #eef2ff 100%);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #dbe4f0;
+  background: #ffffffd0;
+  backdrop-filter: blur(4px);
+}
+
+.brand {
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.actions a,
+.actions button {
+  border: 0;
+  background: #1d4ed8;
+  color: white;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user {
+  color: #334155;
+}
+
+.content {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}

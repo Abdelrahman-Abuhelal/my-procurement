@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{baseUrl}}/api/items?search=string"
+method: GET
+queryParams:
+  search: string
+examples: ./.resources/Catalog Controller find All.resources/examples
+order: 2000

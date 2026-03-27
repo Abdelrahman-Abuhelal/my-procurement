@@ -6,8 +6,9 @@ workspace:
 cloudResources:
   collections:
     ..\postman\collections\Procurement Portal API: 26184987-0fa22832-57af-401f-a370-4408527f804d
+    ..\postman\collections\Mini Procurement Portal API: 5dfae5c6-102c-4c07-b3a6-589574130a6c
   environments:
-    ..\postman\environments\Local - Procurement Portal.environment.yaml: e98e4002-fc04-5bc9-9441-6b02e76fd955
+    ..\postman\environments\Local - Procurement Portal.environment.yaml: 26184987-e98e4002-fc04-5bc9-9441-6b02e76fd955
 
 # All resources in the `postman/` folder are automatically registered in Local View.
 # Point to additional files outside the `postman/` folder to register them individually. Example:

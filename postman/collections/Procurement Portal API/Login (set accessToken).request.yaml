@@ -1,27 +1,27 @@
 $kind: http-request
-name: Login
+url: "{{baseUrl}}/auth/login"
 method: POST
-url: "{{baseUrl}}/auth/signin"
-auth:
-  type: bearer
-  credentials:
-    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OWMzYmFhMDlhNmQ5NjU5Mjk5YjUxZDkiLCJpYXQiOjE3NzQ0MzQ5NzZ9.RaXYjGd1y9TcKe5rHgpj5cf4IWIFYIaS3RPBt5Cd-vw
-order: 2000
 headers:
   Content-Type: application/json
 body:
   type: json
-  content: |
+  content: |-
     {
-      "email": "admin2@example.com",
-      "password": "Admin@1234"
+      "email": "user@example.com",
+      "password": "password"
     }
 scripts:
   - type: afterResponse
     code: >-
-      // Capture the JWT token from the sign-in response.
+      // Attempt to capture the JWT access token from common response shapes.
 
-      // API returns: { user: { ... }, token: "..." }
+      // Expected examples:
+
+      //   { "accessToken": "..." }
+
+      //   { "token": "..." }
+
+      //   { "data": { "accessToken": "..." } }
 
 
       let json;
@@ -34,23 +34,22 @@ scripts:
 
 
       const token =
-        (json && json.token) ||
         (json && json.accessToken) ||
-        (json && json.data && json.data.token) ||
+        (json && json.token) ||
         (json && json.data && json.data.accessToken) ||
         null;
 
-      pm.test('Login returned a token (if 200)', function () {
+      pm.test('Login returned an access token (if 200)', function () {
         if (pm.response.code === 200) {
           pm.expect(token).to.be.a('string').and.not.empty;
         } else {
+          // Don't fail the request just because the endpoint isn't implemented yet
           pm.expect(pm.response.code).to.be.oneOf([200, 400, 401, 403, 404, 422, 500]);
         }
       });
 
-
-      pm.test('Status code is 200', function () {
-        pm.response.to.have.status(200);
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
       });
 
 
@@ -58,3 +57,4 @@ scripts:
         pm.environment.set('accessToken', token);
       }
     language: text/javascript
+order: 2000

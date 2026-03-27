@@ -1,26 +1,28 @@
 $kind: collection
-name: Procurement Portal API
 description: |-
   Starter REST JSON API collection for the Procurement Portal.
-  
+
   Includes:
   - Health check
   - Login placeholder (captures JWT access token)
   - Authenticated "Me" profile request
 variables:
-  - key: baseUrl
-    value: '{{baseUrl}}'
-    description: Base URL for the API (resolved from the active environment)
+  baseUrl: "{{baseUrl}}"
 scripts:
   - type: http:beforeRequest
-    language: text/javascript
-    code: |-
-      // Attach Authorization: Bearer {{accessToken}} automatically when a token exists.
+    code: >-
+      // Attach Authorization: Bearer {{accessToken}} automatically when a token
+      exists.
+
       // Skip for login/auth endpoints.
+
       const url = pm.request.url.toString();
+
       const isAuthEndpoint = /\/auth\/login\b/i.test(url);
 
+
       const token = pm.environment.get('accessToken');
+
 
       if (!isAuthEndpoint && token) {
         pm.request.headers.upsert({
@@ -29,17 +31,21 @@ scripts:
         });
       }
 
+
       // Ensure JSON content type for requests with a body
+
       const method = (pm.request.method || '').toUpperCase();
+
       const hasBody = ['POST', 'PUT', 'PATCH'].includes(method);
+
       if (hasBody) {
         pm.request.headers.upsert({
           key: 'Content-Type',
           value: 'application/json'
         });
       }
-  - type: http:afterResponse
     language: text/javascript
+  - type: http:afterResponse
     code: |-
       // Basic JSON response validation helper
       pm.test('Status code is 2xx/3xx/4xx (not a network error)', function () {
@@ -53,3 +59,4 @@ scripts:
           pm.response.json();
         });
       }
+    language: text/javascript

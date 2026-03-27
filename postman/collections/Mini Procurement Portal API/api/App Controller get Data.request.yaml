@@ -1,0 +1,5 @@
+$kind: http-request
+url: "{{baseUrl}}/api"
+method: GET
+examples: ./.resources/App Controller get Data.resources/examples
+order: 3000
