@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -7,7 +8,7 @@ import { authActions } from './auth/state/auth.actions';
 import { User } from './core/models';
 
 @Component({
-  imports: [RouterModule],
+  imports: [CommonModule, RouterModule],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -15,6 +16,10 @@ import { User } from './core/models';
 export class App {
   private store = inject(Store);
   user$: Observable<User | null> = this.store.select(selectCurrentUser);
+
+  constructor() {
+    this.store.dispatch(authActions.restoreSession());
+  }
 
   signOut() {
     this.store.dispatch(authActions.signOut());
