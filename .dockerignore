@@ -1,0 +1,15 @@
+node_modules
+dist
+.git
+.github
+.angular
+.nx
+.vscode
+.codex
+.codex-temp
+coverage
+tmp
+out-tsc
+__screenshots__
+*.log
+apps/api/.env
