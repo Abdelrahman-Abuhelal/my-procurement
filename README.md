@@ -25,7 +25,6 @@ Full-stack catalog management application for the technical assessment.
 - `apps/procurement-portal` - Angular frontend
 - `apps/api` - NestJS backend
 - `deploy/nginx` - reverse proxy config for unified app entrypoint
-- `doc/GCP_DEPLOY.md` - deployment steps for GCP
 
 ## Environment Variables
 
@@ -85,9 +84,61 @@ npx nx serve api
 
 ## GCP Deployment
 
-For GCP deployment (Compute Engine + Docker Compose), follow:
+This project can be deployed to one Google Compute Engine VM using the same Docker Compose setup.
 
-- `doc/GCP_DEPLOY.md`
+1. Configure gcloud:
+
+```bash
+gcloud auth login
+gcloud config set project <YOUR_PROJECT_ID>
+```
+
+2. Create a VM:
+
+```bash
+gcloud compute instances create procurement-portal-vm \
+  --zone=me-central2-a \
+  --machine-type=e2-medium \
+  --image-family=debian-12 \
+  --image-project=debian-cloud \
+  --tags=procurement-portal-http
+```
+
+3. Open HTTP firewall:
+
+```bash
+gcloud compute firewall-rules create allow-procurement-http \
+  --allow=tcp:80 \
+  --target-tags=procurement-portal-http
+```
+
+4. SSH into the VM:
+
+```bash
+gcloud compute ssh procurement-portal-vm --zone=me-central2-a
+```
+
+5. Install Docker and Docker Compose plugin:
+
+```bash
+sudo apt update
+sudo apt install -y docker.io docker-compose-plugin git
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+6. Clone the repository and create `apps/api/.env`.
+
+7. Start the stack:
+
+```bash
+APP_PORT=80 docker compose up -d --build
+```
+
+8. Visit:
+
+- `http://<EXTERNAL_IP>`
+- `http://<EXTERNAL_IP>/api/docs`
 
 ## Assumptions
 
